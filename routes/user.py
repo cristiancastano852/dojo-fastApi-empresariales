@@ -11,7 +11,7 @@ user = APIRouter()
 
 validToken = "fastApiToken"
 
-@user.get("/users", response_model=list[User], tags=["users"])
+@user.get("/users", tags=["users"])
 def get_users():
     return conn.execute(users.select()).fetchall()
 

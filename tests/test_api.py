@@ -13,9 +13,9 @@ def test_get_user():
     assert response.status_code == 200
     assert response.json() == {
                                 "id": 1,
-                                "name": "juana paola",
-                                "email": "juanaP@udea.edu.co",
-                                "password": "\\x674141414141426a4970354d31786f4b44514b564576464e74567677633468705f716c334a64653977526a44486b49385542534d435a7076307a64664475473232797836476e58467648357a4c49347446305a3545417a2d374773587854337537773d3d"
+                                "name": "juana",
+                                "email": "juana@udea.edu.co",
+                                "password": "pass123"
                             }
 
 def test_get_user_bad_token():
@@ -25,10 +25,10 @@ def test_get_user_bad_token():
 
 def test_create_item():
     newUser = {
-                "id": 24,
-                "name": "Daiana Prince",
-                "email": "wonderWoman@dc.com",
-                "password": "Temiskira"
+                "id": 4,
+                "name": "Peter parker",
+                "email": "Spydi@dc.com",
+                "password": "Avengers 3.0"
             }
     response = client.post("/users", json=newUser)
     assert response.status_code == 200

@@ -1,0 +1,49 @@
+name: fastapi-github-actions-test
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres_user_test
+          POSTGRES_PASSWORD: postgres_password_test
+          POSTGRES_DB: store_db_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: inspect containers
+      run: docker ps
+    - name: Run migrations
+      run: |
+        psql -f tools/Database/seed.sql postgres://postgres_user_test:postgres_password_test@localhost:5432/store_db_test
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8 
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    - name: run tests
+      env:
+        URL_DATABASE: postgresql://postgres_user_test:postgres_password_test@localhost:5432/store_db_test
+      run: pytest
+    - name: check postgres container
+      run: psql -h localhost -p 5432 -d store_db_test -U postgres_user_test -c 'SELECT * FROM users;'
+      env:
+        PGPASSWORD: postgres_password_test

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routes.user import user
+from pydantic import BaseSettings
 
 app = FastAPI(
     title="My first API",

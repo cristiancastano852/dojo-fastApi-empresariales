@@ -1,5 +1,7 @@
 from sqlalchemy import create_engine, MetaData
+from .settings import Settings
 
-engine = create_engine("postgresql://postgres_user_test:postgres_password_test@localhost:5433/store_db_test")
+set = Settings()
+engine = create_engine(set.url_database)
 meta = MetaData()
 conn = engine.connect()
